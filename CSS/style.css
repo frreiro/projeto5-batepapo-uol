@@ -1,0 +1,180 @@
+*{
+ box-sizing: border-box;
+ --fonte-padrao: 'Roboto', sans-serif;
+ --cor-fundo-mensagens:  #F3F3F3;
+ --cor-fundo-msg-entrada: #DCDCDC;
+ --cor-fundo-msg-publica: #FFFFFF;
+ --cor-fundo-msg-privada: #FFDEDE;
+}
+body{
+    background-color: var(--cor-fundo-mensagens);
+}
+/* --- Header --- */
+header{
+    width: 100vw;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #FFFFFF;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+}
+nav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 21px;
+}
+.logo{
+    width: 75px;
+    height: 53px;
+}
+.menu-pessoas{
+ font-size: 45px;
+}
+
+/* --- Main --- */
+main *{
+    font-family: var(--fonte-padrao);
+}
+
+main  {
+    width: 100vw;
+    height: 100vh;
+    margin-top: 106px;  
+}
+main div{
+    border-radius: 2px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+}
+
+
+.mensagem-entrada{
+    background-color: var(--cor-fundo-msg-entrada);
+}
+
+.mensagem-privada{
+    background-color: var(--cor-fundo-msg-privada);
+
+    
+}
+.mensagem-publica{
+    background-color: var(--cor-fundo-msg-publica);
+}
+
+.mensagem{
+    font-weight: 400;
+    font-size: 14px;
+    margin: 0 9px;
+    padding: 10px;  
+    line-height: 20px;
+}
+
+.hora-mensagem{
+    color: #AAAAAA;
+}
+.nome-usuario{
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;  
+}
+
+
+
+/* --- Footer --- */
+footer{
+    width: 100vw;
+    height: 80px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background: #FFFFFF;
+box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+}
+.rodape{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 18px;
+}
+
+input{
+    width: 100vw;
+    height: 30px;
+    border: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000000;
+}
+
+textarea:focus, input:focus {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+}
+input::placeholder{
+    font-family: 'Roboto', sans-serif;
+    font-style: italic;
+    font-size: 18px;
+    font-weight: 400;
+    color: #000000;
+}
+.enviar-msg{
+    font-size: 30px;
+}
+
+
+/* ---- Menu Lateral - BÔNUS ---- */
+.escondido{
+    display: none;
+}
+.menu-lateral *{
+    font-family: var(--fonte-padrao);
+}
+
+.menu-lateral {
+    width: 259px;
+    height: 100vh;
+    background-color: green;
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 2;
+}
+.titulo-lateral{
+    font-weight: 700;  
+    font-size: 16px;
+    text-align: center;
+    padding: 25px;
+    background-color: purple;
+}
+
+.usuarios{
+    font-size: 25px;
+}
+.lateral-estilo {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 16px;
+}
+.lateral-estilo div{
+display: flex;
+align-items: center;
+}
+
+.lateral-estilo div ion-icon{
+    margin-right: 8px;
+}
+
+.usuario-nome{
+    font-size: 16px;
+}

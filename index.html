@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="CSS/reset.css">
+    <link rel="stylesheet" href="CSS/style.css">
+    <title>Bate Papo UOL</title>
+</head>
+<body>
+    <!-- logo e menu -->
+    <header>
+        <nav>
+            <img class="logo" src="imagens/logo 1.png" alt="logo bate papo uol">
+            <ion-icon class="menu-pessoas" name="people"></ion-icon>
+        </nav>
+    </header>
+
+    <!-- Mensagens -->
+    <main>
+        <div class="mensagem-entrada">
+            <p class="mensagem">
+                <span class="hora-mensagem">(09:21:45) </span><em class="nome-usuario">João</em> entra na sala...
+            </p>
+        </div>
+        <div class="mensagem-privada">
+            <p class="mensagem">
+                <span class="hora-mensagem">(09:22:48) </span><em class="nome-usuario">João</em> reservadamente para <em class="nome-usuario">Maria</em>: Oi gatinha quer tc?
+            </p>
+        </div>
+        <div class="mensagem-publica">
+            <p class="mensagem">
+                <span class="hora-mensagem">(09:22:48) </span><em class="nome-usuario">Maria</em> para <em class="nome-usuario">Joao</em>: Oi João :)
+            </p>
+        </div>
+        <div class="mensagem-publica">
+            <p class="mensagem">
+                <span class="hora-mensagem">(09:22:48) </span><em class="nome-usuario">Joao</em> para <em class="nome-usuario">Todos</em>: Fala tu ;)
+            </p>
+        </div>
+    </main>
+
+    <!-- Menu lateral  -->
+    <aside class="menu-lateral escondido">
+        <p class="titulo-lateral">Escolha um contato para enviar mensagem:</p>
+        <!-- Mensagem para todos -->
+        <section class="lateral-estilo usuario">
+            <div>
+                <ion-icon name="people"></ion-icon>
+                <p>Todos</p>
+            </div>
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </section>
+        <!-- Usuarios disponiveis // add dinamicamente -->
+        <section class="lateral-estilo usuario">
+            <div>
+                <ion-icon name="person-circle"></ion-icon>
+                <p class="usuario-nome">Maria</p>
+            </div>
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </section>
+
+        <p class="titulo-lateral">Escolha a visibilidade:</p>
+        
+        <section class="lateral-estilo msg-publica">
+            <div>
+                <ion-icon name="lock-open"></ion-icon>
+                <p class="usuario-nome">Público</p>
+            </div>
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </section>
+        <section class="lateral-estilo msg-privada">
+            <div>
+                <ion-icon name="lock-closed"></ion-icon>
+                <p class="usuario-nome">Reservadamente</p>
+            </div>
+            <ion-icon name="checkmark-sharp"></ion-icon>
+        </section>
+
+
+    </aside>
+
+    <!-- Escrever mensagem -->
+    <footer>
+        <div class="rodape">
+            <input type="text" class="text-input" placeholder="Escreva aqui..."/>
+            <ion-icon class="enviar-msg" name="paper-plane-outline" onclick="enviarMsg()"></ion-icon>
+        </div>
+    </footer>
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
