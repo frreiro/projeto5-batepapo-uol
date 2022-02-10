@@ -44,8 +44,9 @@ main *{
 
 main  {
     width: 100vw;
-    height: 100vh;
-    margin-top: 106px;  
+    padding-top: 106px;
+    padding-bottom: 106px;
+    overflow-y: scroll;
 }
 main div{
     border-radius: 2px;
@@ -79,7 +80,7 @@ main div{
 .hora-mensagem{
     color: #AAAAAA;
 }
-.nome-usuario{
+em{
     font-family: 'Roboto', sans-serif;
     font-weight: 700;  
 }
