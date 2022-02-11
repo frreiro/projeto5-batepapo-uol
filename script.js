@@ -8,6 +8,7 @@ while(nomeUsuario === "") {
     nomeUsuario = prompt("Qual o seu nome?");
 }
 console.log(nomeUsuario);
+/* --- Objeto do usuario --- */
 const usuario = {
     name: nomeUsuario
 }
@@ -15,6 +16,7 @@ const usuario = {
 const entrarSala = axios.post(LINKPARTICIPANTES, usuario);
 entrarSala.then(usuarioEntrouNaSala)
 entrarSala.catch(usuarioNaoEntrouNaSala);
+
 
 /* --- Mantem conexão com o servidor --- */
 setInterval(verificarStatusParticipante,5000);
@@ -27,7 +29,7 @@ function verificarStatusParticipante(){
 let mensagensServer = [];
 /* --- Busca as msg no server ---*/
 trazerMensagens();
-setInterval(trazerMensagens,60000);
+setInterval(trazerMensagens,3000);
 function trazerMensagens(){
     console.log("msgem atualizada")
     let buscarMensagens = axios.get(LINKMENSAGENS);
@@ -36,28 +38,59 @@ function trazerMensagens(){
 
 
 function receberMensagensDoServidor(respostaServidor){
-
-mensagensServer = respostaServidor.data
-// console.log(mensagensServer);
-mostrarStatusUsuario(mensagensServer)
-
-
-
+    mensagensServer = respostaServidor.data
+    console.log(mensagensServer);
+    filtrarTipoDeDados(mensagensServer)
 }
+
+/* -- Mostrar as msgs na tela --- */
+let elemento = document.querySelector("main"); 
+
+function filtrarTipoDeDados(usuario){
+    elemento.innerHTML = "";
+    for(let i=0; i<mensagensServer.length; i++){
+        if(usuario[i].type === "status"){
+            mostrarStatusUsuario(usuario[i]);
+        }else if(usuario[i].type === "message"){
+            mostrarMensagemPublica(usuario[i]);
+        }else if(usuario[i].type === "private_message"){
+            mostrarMensagemPrivada(usuario[i]);
+        }
+    
+    }
+}
+
 
 function mostrarStatusUsuario(usuario){
-    let msgNaTela = document.querySelector("main");
-    for(let i=0; i<mensagensServer.length; i++){
-        msgNaTela.innerHTML += `<div class="mensagem-entrada">
-                                <p class="mensagem"><span class="hora-mensagem">(${usuario[i].time}) </span><em>${usuario[i].from}</em> ${usuario[i].text}
-                                </p>
-                            </div>`
-        msgNaTela.scrollIntoView();
-    }
-
+    elemento.innerHTML += 
+    `<div class="mensagem-entrada">
+        <p class="mensagem"><span class="hora-mensagem">(${usuario.time}) </span><em>${usuario.from}</em> ${usuario.text}
+        </p>
+    </div>`
+    elemento.lastChild.scrollIntoView(); 
 }
 
+function mostrarMensagemPublica(usuario){
+    elemento.innerHTML += 
+    `<div class="mensagem-publica">
+        <p class="mensagem">
+        <span class="hora-mensagem">(${usuario.time}) </span><em>${usuario.from}</em>
+        para <em>${usuario.to}</em>: ${usuario.text}
+        </p>
+    </div>`
+    elemento.lastChild.scrollIntoView(); 
+}
 
+function mostrarMensagemPrivada(usuario){
+    elemento.innerHTML += 
+    `<div class="mensagem-privada">
+        <p class="mensagem">
+            <span class="hora-mensagem">(${usuario.time}) </span><em>${usuario.from}</em>
+             reservadamente para <em>${usuario.to}</em>: ${usuario.text}
+        </p>
+    </div>`
+    elemento.lastChild.scrollIntoView(); 
+}
 
 function usuarioEntrouNaSala(respostaServidor){
     console.log("Usuário entrou no servidor");
@@ -72,16 +105,44 @@ function usuarioNaoEntrouNaSala(erro){
     }
 }
 
+/* --- Envia as msg para o servidor ---- */ 
+let destinatario = "Todos";
+let mensagem = "";
 
-function enviarMsg() {
+let objetoMensagem =
+    {
+        from: nomeUsuario,
+        to: destinatario, // Ou nome usuario
+        text: mensagem,
+        type: "message" // ou "private_message" para o bônus
+    }
+
+function clickEnviarMsg() {
     let inputHTML = document.querySelector("input");
-    let mensagem = inputHTML.value;
-    console.log(mensagem);
+    let mensagemInput = inputHTML.value;
+    console.log(mensagemInput);
     inputHTML.value= "";
     
+    montarMenssagem(nomeUsuario,destinatario,mensagemInput);
+    enviarMsg(objetoMensagem);    
+}
 
-    
-    let msgTela = document.querySelector("main div");
-    msgTela.scrollIntoView();
+function montarMenssagem(nome,destinatario, mensagem){
+    objetoMensagem.from = nome;
+    objetoMensagem.to = destinatario;
+    objetoMensagem.text = mensagem;
+}
+
+function enviarMsg(objeto){
+    let postarMsg = axios.post(LINKMENSAGENS,objeto);
+    postarMsg.then(postarMsgSucesso);
+    postarMsg.catch(postarMsgErro);
+}
+
+function postarMsgSucesso(resposta){
+    console.log("Mensagem Enviada com sucesso")
+}
+function postarMsgErro(erro){
+    console.log("Mensagem Enviada sem sucesso, erro: " + erro.response.status);
 }
 
