@@ -144,7 +144,7 @@ function resetarParticipantesMenuLateral(){
             <ion-icon name="people"></ion-icon>
             <p>Todos</p>
             </div>
-        <ion-icon class="check escondido" name="checkmark-sharp"></ion-icon>
+        <ion-icon class="check" name="checkmark-sharp"></ion-icon>
     </li>`
 }
 
@@ -182,16 +182,13 @@ function esconderMenuLateral(){
 }
 
 /* --- Click na visibilidade --- */
-let visibilidade = null;
+let visibilidade = "Público";
 function visibilidadeMensagem(elemento){
     elementoFilho = elemento.children[1];
 
     const todosCheck = document.querySelectorAll(".visibilidade li ion-icon.check"); //Pega todos os elementos que tem o check
-    for(let i=0; i<todosCheck.length; i++){
-        if(!todosCheck[i].classList.contains('escondido')){
-        todosCheck[i].classList.add('escondido')
-        }
-    }
+    todosCheck.forEach(condicaoEsconderCheck);
+
     elementoFilho.classList.remove("escondido");
     visibilidade = elemento.innerText; //Salva o nome: Publico / Reservadamente
     verificarCondicaoDeMensagem();
@@ -199,18 +196,23 @@ function visibilidadeMensagem(elemento){
 }
 
 /* --- Click nos nomes de usuarios --- */
-let contato = null;
+let contato = "Todos";
 function contatoMensagem(elemento){
     elementoFilho = elemento.children[1];
+
     const todosCheckUsers = document.querySelectorAll(".usuarios li ion-icon.check"); //Pega todos os elementos que tem o check
-    for(let i=0; i<todosCheckUsers.length; i++){
-        if(!todosCheckUsers[i].classList.contains('escondido')){
-            todosCheckUsers[i].classList.add('escondido')
-        }
-    }
+    todosCheckUsers.forEach(condicaoEsconderCheck);
+
     elementoFilho.classList.remove("escondido");
     contato = elemento.innerText; // Salva o nome do contato
     verificarCondicaoDeMensagem();
+}
+
+/* --- condicao para esconder ou não o check na lista de contatos --- */
+function condicaoEsconderCheck(checkClass){
+    if(!checkClass.classList.contains('escondido')){
+        checkClass.classList.add('escondido')
+        }
 }
 
 /* --- condicao para adicionar o texto em baixo do input ---*/
@@ -236,18 +238,29 @@ let mensagem = "";
 let objetoMensagem =
     {
         from: nomeUsuario,
-        to: contato, // Ou nome usuario
+        to: contato,
         text: mensagem,
-        type: visibilidadeDaMensagemAEnviar() // ou "private_message" para o bônus
+        type: visibilidadeDaMensagemAEnviar() // "message" ou "private_message"
     }
 
 function clickEnviarMsg() {
     let inputHTML = document.querySelector("input");
     let mensagemInput = inputHTML.value;
     inputHTML.value= "";
-    console.log(contato);
-    montarMenssagem(nomeUsuario,contato,mensagemInput,visibilidadeDaMensagemAEnviar());
-    enviarMsg(objetoMensagem);    
+    if(retornarCasoInputVazio(mensagemInput)){
+        console.log(contato);
+        montarMenssagem(nomeUsuario,contato,mensagemInput,visibilidadeDaMensagemAEnviar());
+        enviarMsg(objetoMensagem); 
+    }  
+}
+
+function retornarCasoInputVazio(mensagemInput){
+    if(mensagemInput === "" || mensagemInput === " "){
+        alert("A mensagem deverá conter pelo menos uma letra");
+        return false;
+    }else {
+        return true;
+    }
 }
 
 function montarMenssagem(from,to, message,type){
@@ -268,6 +281,7 @@ function postarMsgSucesso(resposta){
 }
 function postarMsgErro(erro){
     console.log("Mensagem Enviada sem sucesso, erro: " + erro.response.status);
+    window.location.reload();
 }
 
 function visibilidadeDaMensagemAEnviar(){
@@ -280,4 +294,4 @@ function visibilidadeDaMensagemAEnviar(){
     }
 }
 
-
+renderizarMensagemDeEnvio();
