@@ -119,37 +119,58 @@ function mostrarMensagemPrivada(usuario){
 
 
 /* --- Configuracoes menu lateral --- */
-buscarParticipantesServidor ();
+buscarParticipantesServidor();
 setInterval(buscarParticipantesServidor,10000);
 
-function buscarParticipantesServidor (){
+function buscarParticipantesServidor(){
     let buscarParticipantes = axios.get(LINKPARTICIPANTES);
     buscarParticipantes.then(participantesServidor);
 }
 
 let participantes = {};
+let temCheck = {};
 let usuarios = document.querySelector("ul.usuarios");
 function participantesServidor(respostaServidor){
     resetarParticipantesMenuLateral();
     participantes = respostaServidor.data;
-    for(let i=0; i<participantes.length; i++){
-        renderizarParticipantesMenuLateral(participantes[i])
-    }
+    temCheck = participantes.filter(encontrarAntigoContatoSelecionado); // Filtra o usuario selecionado
+    participantes.forEach(renderizarParticipantesMenuLateral); // Renderiza os usuários na tela
 }
 
 function resetarParticipantesMenuLateral(){
-    usuarios.innerHTML = 
-    `<li class="lateral-estilo usuario" onclick="contatoMensagem(this) "data-identifier="participant">
-            <div>
-            <ion-icon name="people"></ion-icon>
-            <p>Todos</p>
-            </div>
-        <ion-icon class="check" name="checkmark-sharp"></ion-icon>
-    </li>`
+    if(contato === "Todos"){
+        usuarios.innerHTML = 
+        `<li class="lateral-estilo usuario" onclick="contatoMensagem(this) "data-identifier="participant">
+                <div>
+                <ion-icon name="people"></ion-icon>
+                <p>Todos</p>
+                </div>
+            <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+        </li>`
+    }else {
+        usuarios.innerHTML = 
+        `<li class="lateral-estilo usuario" onclick="contatoMensagem(this) "data-identifier="participant">
+                <div>
+                <ion-icon name="people"></ion-icon>
+                <p>Todos</p>
+                </div>
+            <ion-icon class="check escondido" name="checkmark-sharp"></ion-icon>
+        </li>`
+    }
 }
 
 function renderizarParticipantesMenuLateral(participante){
-    usuarios.innerHTML += 
+    if(temCheck[0] !== undefined && participante.name === temCheck[0].name){
+        usuarios.innerHTML += 
+        `<li class="lateral-estilo usuario" onclick="contatoMensagem(this)" data-identifier="participant">
+            <div>
+                <ion-icon name="person-circle"></ion-icon>
+                <p class="usuario-nome">${participante.name}</p>
+            </div>
+            <ion-icon class="check" name="checkmark-sharp"></ion-icon>
+        </li>`
+    }else{
+        usuarios.innerHTML += 
     `<li class="lateral-estilo usuario" onclick="contatoMensagem(this)" data-identifier="participant">
         <div>
             <ion-icon name="person-circle"></ion-icon>
@@ -157,7 +178,10 @@ function renderizarParticipantesMenuLateral(participante){
         </div>
         <ion-icon class="check escondido" name="checkmark-sharp"></ion-icon>
     </li>`
+    }
 }
+
+
 
 
 /* --- Abrir menu lateral --- */
@@ -207,6 +231,16 @@ function contatoMensagem(elemento){
     contato = elemento.innerText; // Salva o nome do contato
     verificarCondicaoDeMensagem();
 }
+
+function encontrarAntigoContatoSelecionado(usuarioLateral){
+    nomeUsuarioLateral = usuarioLateral.name
+    if (nomeUsuarioLateral === contato){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 /* --- condicao para esconder ou não o check na lista de contatos --- */
 function condicaoEsconderCheck(checkClass){
