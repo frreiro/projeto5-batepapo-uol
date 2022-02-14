@@ -20,7 +20,8 @@ header{
     top: 0;
     left: 0;
     background: #FFFFFF;
-box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 0;
 }
 nav{
     display: flex;
@@ -88,6 +89,10 @@ em{
 
 
 /* --- Footer --- */
+footer *{
+    font-family: 'Roboto', sans-serif;
+}
+
 footer{
     width: 100vw;
     height: 80px; 
@@ -98,7 +103,8 @@ footer{
     bottom: 0;
     left: 0;
     background: #FFFFFF;
-box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 0;
 }
 .rodape{
     display: flex;
@@ -108,11 +114,19 @@ box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
     margin: 0 18px;
 }
 
-input{
+.rodape div{
     width: 100vw;
+}
+
+.rodape p {
+    font-weight: 300;
+    color: #666666;
+}
+
+input{
+    width: 100%;
     height: 30px;
     border: none;
-    font-family: 'Roboto', sans-serif;
     font-size: 18px;
     font-weight: 400;
     color: #000000;
@@ -138,6 +152,27 @@ input::placeholder{
 .escondido{
     display: none;
 }
+.background-lateral{
+    width: 100vw;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+ul.usuarios{
+    width: 100%;
+    max-height: 250px;
+    overflow: scroll;
+}
+
+.check{
+    color: #28BB25;
+    font-size: 14px;
+}
+
 .menu-lateral *{
     font-family: var(--fonte-padrao);
 }
@@ -145,23 +180,21 @@ input::placeholder{
 .menu-lateral {
     width: 259px;
     height: 100vh;
-    background-color: green;
+    background: #FFFFFF;;
+    overflow: scroll;
     position: fixed;
     top: 0;
     right: 0;
-    z-index: 2;
+    z-index: 4;
 }
 .titulo-lateral{
     font-weight: 700;  
     font-size: 16px;
     text-align: center;
     padding: 25px;
-    background-color: purple;
+    background: #FFFFFF;;
 }
 
-.usuarios{
-    font-size: 25px;
-}
 .lateral-estilo {
     display: flex;
     justify-content: space-between;
