@@ -12,6 +12,7 @@
     <title>Bate Papo UOL</title>
 </head>
 <body>
+    
     <!-- logo e menu -->
     <header >
         <nav>
@@ -19,6 +20,14 @@
             <ion-icon class="menu-pessoas" name="people" onclick="mostrarMenuLateral()"></ion-icon>
         </nav>
     </header>
+
+    <section class="tela-entrada">
+        <img class="logo" src="imagens/logo 1.png"/>
+        <div>
+            <input type="text" name="2" placeholder="Digite seu nome" data-identifier="enter-name"/>
+            <button onclick="obterNomeUsuario()" data-identifier="start">Entrar</button>
+        </div>
+    </section>
 
     <!-- Mensagens -->
     <main>
@@ -83,7 +92,7 @@
     <footer>
         <div class="rodape">
             <div>
-                <input type="text" class="text-input" placeholder="Escreva aqui..."/>
+                <input type="text" name="1" placeholder="Escreva aqui..."/>
                 <!-- <p> adicionado dinamicamente -->
             </div>
             <ion-icon class="enviar-msg" name="paper-plane-outline" onclick="clickEnviarMsg()" data-identifier="send-message"></ion-icon>

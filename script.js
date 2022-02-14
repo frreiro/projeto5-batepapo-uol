@@ -2,25 +2,46 @@ const LINKPARTICIPANTES = 'https://mock-api.driven.com.br/api/v4/uol/participant
 const LINKSTATUS = 'https://mock-api.driven.com.br/api/v4/uol/status';
 const LINKMENSAGENS = 'https://mock-api.driven.com.br/api/v4/uol/messages';
 
-let nomeUsuario = prompt("Qual o seu nome?");
-/* --- Verifica se não é nulo --- */
-while(nomeUsuario === "") {
-    nomeUsuario = prompt("Qual o seu nome?");
-}
-console.log(nomeUsuario);
+
 /* --- Objeto do usuario --- */
-const usuario = {
-    name: nomeUsuario
+const usuario = {}
+
+/* --- Recebe o nome da tela de entrada --- */
+let nomeUsuario = null;
+function obterNomeUsuario(){
+    nomeUsuario = document.querySelector(".tela-entrada input").value;
+    if(verificarSeNomeUsuarioNaoENulo(nomeUsuario)){
+        usuario.name = nomeUsuario;
+        entradaDoUsuarioServidor();
+    }
+
+}
+
+/* --- Verifica se não é nulo --- */
+function verificarSeNomeUsuarioNaoENulo(nome){
+    if(nome === "" || nome === null){
+        alert("Seu nome deve conter mais letras");
+    }else {
+        return true;
+    }
 }
 
 /* --- Entrada do usuario no servidor --- */
-const entrarSala = axios.post(LINKPARTICIPANTES, usuario);
-entrarSala.then(usuarioEntrouNaSala)
-entrarSala.catch(usuarioNaoEntrouNaSala);
+function entradaDoUsuarioServidor(){
+    const entrarSala = axios.post(LINKPARTICIPANTES, usuario);
+    entrarSala.then(usuarioEntrouNaSala)
+    exibirTelaDeLoading();
+    entrarSala.catch(usuarioNaoEntrouNaSala);
+}
 
+/* --- usuario entrou no servidor ---*/
 function usuarioEntrouNaSala(respostaServidor){
     console.log("Usuário entrou no servidor");
+    esconderTelaDeLoading();
+    setInterval(verificarStatusParticipante,5000); // a cada 5s ele envia o status do participante
 }
+
+/* --- usuario nao entrou no servidor ---*/
 function usuarioNaoEntrouNaSala(erro){
     console.log(erro.response.status);
     console.log("Usuário não entrou no servidor, msg: " + erro.response.data);
@@ -31,14 +52,28 @@ function usuarioNaoEntrouNaSala(erro){
     }
 }
 
+/* --- exibe a tela de loading ---*/
+function exibirTelaDeLoading(){
+    const div = document.querySelector(".tela-entrada div");
+    div.innerHTML = `
+    <img src="imagens/loader.gif"/>
+    <p>Entrando...<p>  `
+}
 
-/* --- Mantem conexão com o servidor --- */
-setInterval(verificarStatusParticipante,5000);
+/*--- esconde a tela de loading ---*/
+function esconderTelaDeLoading(){
+    const telaInicio = document.querySelector("section.tela-entrada");
+    telaInicio.classList.add("escondido");
+}
+
+
+/* --- funcao que mantem conexão com o servidor --- */
 function verificarStatusParticipante(){
     const statusParticipante = axios.post(LINKSTATUS, usuario);
     // statusParticipante.then(console.log("status enviado"));
     // add O statusParticipante.catch posteriormente
 }
+
 
 
 /* --- Busca as msg no server ---*/
@@ -50,7 +85,7 @@ function trazerMensagens(){
     buscarMensagens.then(receberMensagensDoServidor);
 }
 
-
+/* ---  recebe as mensagens do servidor ---*/
 function receberMensagensDoServidor(respostaServidor){
     mensagensServer = respostaServidor.data
     filtrarTipoDeDados(mensagensServer)
@@ -58,9 +93,7 @@ function receberMensagensDoServidor(respostaServidor){
 }
 
 
-/* -- Mostrar as msgs na tela --- */
-
-
+/* --- filtra as mensagens privadas que contem o nome do usuario ---*/
 function eProUsuario(mensagem){
     if(mensagem.type === "private_message"){
         if(mensagem.from === nomeUsuario || mensagem.to === nomeUsuario){
@@ -69,6 +102,7 @@ function eProUsuario(mensagem){
     }   
 }
 
+/* -- Mostrar as msgs na tela de acordo com as condições--- */
 let elemento = document.querySelector("main"); 
 function filtrarTipoDeDados(mensagem){
     elemento.innerHTML = "";
@@ -84,6 +118,7 @@ function filtrarTipoDeDados(mensagem){
     }
 }
 
+/* --- mostras as mensagens de saida/entrada ---*/
 function mostrarStatusUsuario(usuario){
     elemento.innerHTML += 
     `<div class="mensagem-entrada" data-identifier="message">
@@ -93,6 +128,7 @@ function mostrarStatusUsuario(usuario){
     elemento.lastChild.scrollIntoView(); 
 }
 
+/* --- mostras as mensagens que são publicas ---*/
 function mostrarMensagemPublica(usuario){
     elemento.innerHTML += 
     `<div class="mensagem-publica" data-identifier="message">
@@ -103,7 +139,7 @@ function mostrarMensagemPublica(usuario){
     </div>`
     elemento.lastChild.scrollIntoView(); 
 }
-
+/* --- mostras as mensagens que são privadas ---*/
 function mostrarMensagemPrivada(usuario){
     elemento.innerHTML += 
     `<div class="mensagem-privada" data-identifier="message">
@@ -122,6 +158,7 @@ function mostrarMensagemPrivada(usuario){
 buscarParticipantesServidor();
 setInterval(buscarParticipantesServidor,10000);
 
+/* --- busca no servidor os usuarios online ---*/
 function buscarParticipantesServidor(){
     let buscarParticipantes = axios.get(LINKPARTICIPANTES);
     buscarParticipantes.then(participantesServidor);
@@ -134,9 +171,11 @@ function participantesServidor(respostaServidor){
     resetarParticipantesMenuLateral();
     participantes = respostaServidor.data;
     temCheck = participantes.filter(encontrarAntigoContatoSelecionado); // Filtra o usuario selecionado
+
     participantes.forEach(renderizarParticipantesMenuLateral); // Renderiza os usuários na tela
 }
 
+/* ---  renderiza somente o o usuario "Todos" --*/
 function resetarParticipantesMenuLateral(){
     if(contato === "Todos"){
         usuarios.innerHTML = 
@@ -159,6 +198,7 @@ function resetarParticipantesMenuLateral(){
     }
 }
 
+/* ---  renderiza os usuarios online no menu lateral ---*/
 function renderizarParticipantesMenuLateral(participante){
     if(temCheck[0] !== undefined && participante.name === temCheck[0].name){
         usuarios.innerHTML += 
@@ -232,6 +272,7 @@ function contatoMensagem(elemento){
     verificarCondicaoDeMensagem();
 }
 
+/* --- procura na lista atualizada os usuarios anteriormente clicados ---*/
 function encontrarAntigoContatoSelecionado(usuarioLateral){
     nomeUsuarioLateral = usuarioLateral.name
     if (nomeUsuarioLateral === contato){
@@ -278,7 +319,7 @@ let objetoMensagem =
     }
 
 function clickEnviarMsg() {
-    let inputHTML = document.querySelector("input");
+    let inputHTML = document.querySelector(".rodape input");
     let mensagemInput = inputHTML.value;
     inputHTML.value= "";
     if(retornarCasoInputVazio(mensagemInput)){
