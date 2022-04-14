@@ -15,13 +15,6 @@ O projeto teve como requisito o uso de Javascript e introduziu alguns conceitos 
   - Biblioteca Axios
   - Tratamento de erros
 
-## 🖥️ Web
-
-<p align="center">
-  <img width="400" height="268" alt="print-globo
-o.com" src="https://user-images.githubusercontent.com/98192816/163461221-1252d477-eb06-48aa-b2d1-7e7879bab1b3.png">
-</p><br>
-
 ## 📱 Mobile
 
 
